@@ -20,7 +20,9 @@ public class AirportDao {
 	private EntityManager entityManager = JpaUtil.getEntityManager();
 	
 	public void create(Airport airport) {
+		entityManager.getTransaction().begin();
 		entityManager.persist(airport);
+		entityManager.getTransaction().commit();
 	}
 
 	public Airport update(Airport airport) {

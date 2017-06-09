@@ -22,7 +22,9 @@ public class FlightDao {
 	private EntityManager entityManager = JpaUtil.getEntityManager();
 
 	public void create(Flight flight) {
+		entityManager.getTransaction().begin();
 		entityManager.persist(flight);
+		entityManager.getTransaction().commit();
 	}
 
 	public Flight update(Flight flight) {

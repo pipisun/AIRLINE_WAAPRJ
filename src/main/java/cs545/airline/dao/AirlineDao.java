@@ -22,7 +22,9 @@ public class AirlineDao {
 
 
 	public void create(Airline airline) {
+		entityManager.getTransaction().begin();
 		entityManager.persist(airline);
+		entityManager.getTransaction().commit();
 	}
 
 	public Airline update(Airline airline) {
