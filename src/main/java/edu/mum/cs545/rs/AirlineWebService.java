@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -23,114 +25,115 @@ public class AirlineWebService {
 
 	@Inject
 	private AirlineService airlineService;
-	private FlightService flightService;
-	
-//	@GET
-//	public String helloWorld(@DefaultValue("Gorgeous") @QueryParam("name") String name) {
-//		return "Hello " + name + "!";
-//	}
-
-//	@Path("create")
-//	@GET
-//	public String getAirlineTest() {
-//		String result = "Nil!";
-//		Airline airline = airlineService.findByName("oneworld");
-//		if (airline != null) {
-//			result = "This is an airline: " + airline.getName();
-//		}
-//		return result;
-//	}
 	
 	@Path("create")
-	@GET
-	public String createAirline(@QueryParam("name") String name) {
-		String result = "";
-		Airline airline = airlineService.findByName(name);
-		if (airline != null) {
-			result = "The name of airline choosen existed, please use another name.";
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String createAirline(Airline airline) {
+		String result  = "";
+		
+		try {
+			airlineService.create(airline);
+			result = "Airline created successfully.";
 		}
-		else {
-			airlineService.create(new Airline(name));
-			result = "The " + name + " airline was created successfully.";
+		catch(Exception e) {
+			result = "Failed to create airline";
 		}
+		
 		return result;
 	}
 	
 	@Path("delete")
-	@GET
-	public String deleteAirline(@QueryParam("name") String name) {
-		String result = "";
-		Airline airline = airlineService.findByName(name);
-		if (airline == null) {
-			result = "The " + name + " airline was not found.";
-		}
-		else {
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteAirline(Airline airline) {
+		String result  = "";
+		
+		try {
 			airlineService.delete(airline);
-			result = "The " + name + " airline was deleted successfully.";
+			result = "Airline deleted successfully.";
 		}
+		catch(Exception e) {
+			result = "Failed to delete airline";
+		}
+		
 		return result;
 	}
 	
 	@Path("update")
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Airline updateAirline(@QueryParam("name") String name) {
-		String result = "";
-		Airline airline = airlineService.findByName(name);
-		if (airline == null) {
-			result = "The " + name + " airline was not found.";
+	public Airline updateAirline(Airline airline) {
+		Airline f = null;
+		try {
+			f = airlineService.update(airline);
 		}
-		else {
-			result = "The " + name + " airline was updated successfully.";
+		catch(Exception e) {
 		}
-		return airlineService.update(airline);
+		
+		return f;
 	}
 	
 	@Path("find")
 	@GET
-	public String findAirline(@QueryParam("name") String name) {
-		String result = "";
-		Airline airline = airlineService.findByName(name);
-		if (airline == null) {
-			result = "The " + name + " airline was not found.";
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Airline findAirline(Airline airline) {
+		Airline a = null;
+		
+		try {
+			a = airlineService.find(airline);
 		}
-		else {
-			
-			result = "The " + name + " airline was found.";
+		catch(Exception e) {
 		}
-		return result;
+		
+		return a;
 	}
 	
 	@Path("findbyname")
 	@GET
-	public String findAirlineByName(@QueryParam("name") String name) {
-		String result = "";
-		Airline airline = airlineService.findByName(name);
-		if (airline == null) {
-			result = "The " + name + " airline was not found.";
+	@Produces(MediaType.APPLICATION_JSON)
+	public Airline findAirlineByName(@QueryParam("name") String name) {
+		Airline a = null;
+		
+		try {
+			a = airlineService.findByName(name);
 		}
-		else {
-			result = "The " + name + " airline was found.";
+		catch(Exception e) {
 		}
-		return result;
+		
+		return a;
 	}
 	
 	@Path("findbyflightno")
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Airline> findAirlinesByFlight(@QueryParam("flightno") String flightno) {
-		List<Airline> airlines = new ArrayList<>();
-		List<Flight> flights = flightService.findByNumber(flightno);
-		for(Flight flight : flights) {
-			airlines.add(flight.getAirline());
+	public List<Airline> findAirlinesByFlight(Flight flight) {
+		List<Airline> as = null;
+		
+		try {
+			as = airlineService.findByFlight(flight);
 		}
-		return airlines;
+		catch(Exception e) {
+		}
+		
+		return as;
 	}
 	
 	@Path("findall")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Airline> findAllAirlines() {
-		return airlineService.findAll();
+		List<Airline> as = null;
+		
+		try {
+			as = airlineService.findAll();
+		}
+		catch(Exception e) {
+		}
+		
+		return as;
 	}
 }
