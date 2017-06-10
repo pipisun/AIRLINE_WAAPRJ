@@ -67,15 +67,13 @@ public class AirplaneWebService {
 	}
 	
 	
-	@Path("update/{id}")
+	@Path("update")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public String updateAirplane(Airplane airplane) {
-		Airplane ap = null;
 		String result = "";
 		try {
-			ap = airplaneService.update(airplane);
+			airplaneService.update(airplane);
 			result = "Updated successfully";
 		}
 		catch(Exception e) {

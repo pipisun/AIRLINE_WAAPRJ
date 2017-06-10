@@ -9,6 +9,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -44,14 +45,17 @@ public class AirportWebService {
 		return result;
 	}
 	
-	@Path("delete")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String deleteAirport(Airport airport) {
+	@Path("delete/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteAirport(@PathParam("id") long id) {
 		String result  = "";
-		
+		Airport ap = null;
 		try {
-			airportService.delete(airport);
+			ap = new Airport();
+			ap.setId(id);
+			ap = airportService.find(ap);
+			airportService.delete(ap);
 			result = "Airport deleted successfully.";
 		}
 		catch(Exception e) {
@@ -63,18 +67,20 @@ public class AirportWebService {
 	
 	
 	@Path("update")
-	@GET
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Airport updateAirport(Airport airport) {
-		Airport f = null;
+	public String updateAirport(Airport airport) {
+		String result = "";
 		try {
-			f = airportService.update(airport);
+			airportService.update(airport);
+			result = "Updated successfully";
 		}
 		catch(Exception e) {
+			result = "Updated failure";
 		}
 		
-		return f;
+		return result;
 	}
 	
 	@Path("findbycode")

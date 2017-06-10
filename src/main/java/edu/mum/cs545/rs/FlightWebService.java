@@ -11,6 +11,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -42,20 +43,23 @@ public class FlightWebService {
 			result = "Flight created successfully.";
 		}
 		catch(Exception e) {
-			result = "Failed to create flight";
+			result = "Failed to create flight" + e.getMessage();
 		}
 		
 		return result;
 	}
 	
-	@Path("delete")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String deleteFlight(Flight flight) {
+	@Path("delete/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteFlight(@PathParam("id") long id) {
 		String result  = "";
-		
+		Flight flt = null;
 		try {
-			flightService.delete(flight);
+			flt = new Flight();
+			flt.setId(id);
+			flt = flightService.find(flt);
+			flightService.delete(flt);
 			result = "Flight deleted successfully.";
 		}
 		catch(Exception e) {
@@ -70,15 +74,17 @@ public class FlightWebService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Flight updateFlight(Flight flight) {
-		Flight f = null;
+	public String updateFlight(Flight flight) {
+		String result = "";
 		try {
-			f = flightService.update(flight);
+			flightService.update(flight);
+			result = "Updated successfully";
 		}
 		catch(Exception e) {
+			result = "Updated failure";
 		}
 		
-		return f;
+		return result;
 	}
 	
 	@Path("find")
