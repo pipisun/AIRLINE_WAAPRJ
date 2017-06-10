@@ -9,7 +9,7 @@ public class RestConfig extends ResourceConfig {
 	
 	public RestConfig() {
 		register(new ClassBinder());
-		packages(true, "edu.mum.cs545.rs, com.fasterxml.jackson.jaxrs.json");
+		packages(true, "edu.mum.cs545.rs, edu.mum.cs545.ws, com.fasterxml.jackson.jaxrs.json");
 
 	}
 	

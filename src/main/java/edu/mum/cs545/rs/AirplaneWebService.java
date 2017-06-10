@@ -9,6 +9,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -37,43 +38,51 @@ public class AirplaneWebService {
 			result = "Airplane created successfully.";
 		}
 		catch(Exception e) {
-			result = "Failed to create airplane";
+			result = "Failed to create airplane:" + e.getMessage();
 		}
 		
 		return result;
 	}
 	
-	@Path("delete")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String deleteAirplane(Airplane airplane) {
+	@Path("delete/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteAirplane(@PathParam("id") long id) {
 		String result  = "";
+		Airplane f = null;
 		
 		try {
-			airplaneService.delete(airplane);
+			f = new Airplane();
+			f.setId(id);
+			f = airplaneService.find(f);
+			airplaneService.delete(f);
+			
 			result = "Airplane deleted successfully.";
 		}
 		catch(Exception e) {
-			result = "Failed to delete airplane";
+			result = "Failed to delete airplane" + e.getMessage();
 		}
 		
 		return result;
 	}
 	
 	
-	@Path("update")
-	@GET
+	@Path("update/{id}")
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Airplane updateAirplane(Airplane airplane) {
+	public String updateAirplane(Airplane airplane) {
 		Airplane ap = null;
+		String result = "";
 		try {
 			ap = airplaneService.update(airplane);
+			result = "Updated successfully";
 		}
 		catch(Exception e) {
+			result = "Failed to update";
 		}
 		
-		return ap;
+		return result;
 	}
 	
 	@Path("findbyserialno")

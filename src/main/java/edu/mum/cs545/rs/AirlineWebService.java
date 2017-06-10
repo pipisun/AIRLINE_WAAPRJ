@@ -1,15 +1,12 @@
 package edu.mum.cs545.rs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import cs545.airline.model.Airline;
 import cs545.airline.model.Flight;
 import cs545.airline.service.AirlineService;
-import cs545.airline.service.FlightService;
 
 @Named
 @Path("airline")
@@ -45,14 +41,17 @@ public class AirlineWebService {
 		return result;
 	}
 	
-	@Path("delete")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String deleteAirline(Airline airline) {
-		String result  = "";
-		
+	@Path("delete/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteAirline(@PathParam("id") long id) {
+		Airline f = null;
+		String result = "";
 		try {
-			airlineService.delete(airline);
+			f = new Airline();
+			f.setId(id);
+			f = airlineService.find(f);
+			airlineService.delete(f);
 			result = "Airline deleted successfully.";
 		}
 		catch(Exception e) {
