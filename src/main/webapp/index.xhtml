@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	
+	>
+
+<h:head>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
+<h:body>
+
+	<h:form>
+		<h:commandLink action="index?faces-redirect=true">
+			<h:outputText value="backHome"></h:outputText>
+		</h:commandLink>
+	</h:form>
+ 	<br/>
+ 	<h:form>
+ 	Airline Name:
+ 	<h:inputText id="airlineName_id" value="#{flightService.queryFlight.airlineName}"> </h:inputText>
+ 	<br/>
+ 	Origin Airport:
+ 	<h:inputText id="originAirportCode_id" value="#{flightService.queryFlight.originAirportCode}"> </h:inputText>
+ 	<br/>
+ 	Destination Airport Code:
+ 	<h:inputText id="destinationAirportCode_id" value="#{flightService.queryFlight.destinationAirportCode}"> </h:inputText>
+	<br/>
+<!--  	Departure DateTime: -->
+<!--  	<h:inputText value="#{myFlightService.flightQuery.departureFromDate}" style="width:50px" />  -->
+<!--  	<h:inputText value="#{myFlightService.flightQuery.departureFromTime}" style="width:50px" />  -->
+
+	<h:commandButton value="search">
+		<f:ajax listener="#{flightService.queryFlight()}" execute="@form" render="list" />
+	</h:commandButton>
+	</h:form>
+	<h:dataTable value="#{flightService.findAll()}" var="o" id="list"
+		styleClass="order-table" headerClass="order-table-header"
+		rowClasses="order-table-odd-row,order-table-even-row">
+		<h:column>
+			<f:facet name="header">Flight Number</f:facet>#{o.flightnr}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Airline</f:facet>#{o.airline.name}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Departure Date/Time</f:facet>#{o.departureDate}&nbsp;&nbsp; #{o.departureTime}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Arrival Date/Time</f:facet>#{o.arrivalDate}&nbsp;&nbsp; #{o.arrivalTime}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Origin Airport</f:facet>(#{o.origin.airportcode})#{o.origin.name}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Destination Airport</f:facet>(#{o.destination.airportcode})#{o.destination.name}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Model</f:facet>#{o.airplane.model}
+		</h:column>
+		<h:column>
+			<f:facet name="header">Capacity</f:facet>#{o.airplane.capacity}
+		</h:column>
+ 
+	</h:dataTable>
+
+
+</h:body>
+</html>
