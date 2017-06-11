@@ -8,35 +8,31 @@
 	>
 
 <h:head>
-	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet name="css/style.css" />
 </h:head>
 <h:body>
 
 	<h:form>
 		<h:commandLink action="index?faces-redirect=true">
-			<h:outputText value="backHome"></h:outputText>
+			<h:outputText value="Back to home"></h:outputText>
 		</h:commandLink>
 	</h:form>
  	<br/>
  	<h:form>
  	Airline Name:
- 	<h:inputText id="airlineName_id" value="#{flightService.queryFlight.airlineName}"> </h:inputText>
+ 	<h:inputText id="airlineName_id" value="#{customFlightService.flightQuery.airlineName}"> </h:inputText>
  	<br/>
  	Origin Airport:
- 	<h:inputText id="originAirportCode_id" value="#{flightService.queryFlight.originAirportCode}"> </h:inputText>
+ 	<h:inputText id="originAirportCode_id" value="#{customFlightService.flightQuery.originAirportCode}"> </h:inputText>
  	<br/>
  	Destination Airport Code:
- 	<h:inputText id="destinationAirportCode_id" value="#{flightService.queryFlight.destinationAirportCode}"> </h:inputText>
+ 	<h:inputText id="destinationAirportCode_id" value="#{customFlightService.flightQuery.destinationAirportCode}"> </h:inputText>
 	<br/>
-<!--  	Departure DateTime: -->
-<!--  	<h:inputText value="#{myFlightService.flightQuery.departureFromDate}" style="width:50px" />  -->
-<!--  	<h:inputText value="#{myFlightService.flightQuery.departureFromTime}" style="width:50px" />  -->
-
-	<h:commandButton value="search">
-		<f:ajax listener="#{flightService.queryFlight()}" execute="@form" render="list" />
+	<h:commandButton value="Search">
+		<f:ajax listener="#{customFlightService.queryFlight()}" execute="@form" render="list" />
 	</h:commandButton>
 	</h:form>
-	<h:dataTable value="#{flightService.findAll()}" var="o" id="list"
+	<h:dataTable value="#{customFlightService.listFlight}" var="o" id="list"
 		styleClass="order-table" headerClass="order-table-header"
 		rowClasses="order-table-odd-row,order-table-even-row">
 		<h:column>

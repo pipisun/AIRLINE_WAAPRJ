@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import cs545.airline.dao.AirlineDao;
+import cs545.airline.dao.AirportDao;
 import cs545.airline.dao.FlightDao;
 import cs545.airline.model.Airline;
 import cs545.airline.model.Airplane;
@@ -78,5 +80,19 @@ public class FlightService {
 
 	public List<Flight> findAll() {
 		return flightDao.findAll();
+	}
+	
+	public List<Flight> queryFlight(String airlinename,String originairportcode,String destairportcode) {
+		long airlineid=0, oairportid=0, dairportid=0;
+		
+		if(!airlinename.isEmpty())
+			airlineid = new AirlineDao().findOneByName(airlinename.trim()).getId();
+		if(!originairportcode.isEmpty())
+			oairportid = new AirportDao().findOneByCode(originairportcode.trim()).getId();
+		if(!destairportcode.isEmpty())
+			dairportid = new AirportDao().findOneByCode(destairportcode.trim()).getId();
+		
+		return flightDao.queryFlight(airlineid, oairportid, dairportid);
+			
 	}
 }

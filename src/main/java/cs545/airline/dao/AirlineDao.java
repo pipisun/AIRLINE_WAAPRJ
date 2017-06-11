@@ -63,5 +63,5 @@ public class AirlineDao {
 	public List<Airline> findAll() {
 		return entityManager.createQuery("select a from Airline a", Airline.class).getResultList();
 	}
-
+	
 }

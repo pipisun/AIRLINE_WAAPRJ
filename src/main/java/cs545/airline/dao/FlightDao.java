@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
+import cs545.airline.model.Airline;
 import cs545.airline.model.Flight;
 import edu.mum.gf.workaround.JpaUtil;
 
@@ -136,6 +137,40 @@ public class FlightDao {
 
 	public List<Flight> findAll() {
 		return entityManager.createQuery("select f from Flight f", Flight.class).getResultList();
-	}
-
+	} 
+	
+	@SuppressWarnings("unchecked")
+	public List<Flight> queryFlight(long airlineid, long originairportid, long destairportid) {
+		Query query = null;
+		String strQuery = "";
+		if(airlineid != 0 && originairportid == 0 && destairportid == 0) {
+			strQuery = "SELECT f FROM Flight f where f.airline.id=:airlineid";
+			query = entityManager.createQuery(strQuery, Flight.class);
+			query.setParameter("airlineid", airlineid);
+		}
+		else if(airlineid == 0 && originairportid != 0 && destairportid == 0) {
+			strQuery = "SELECT f FROM Flight f where f.origin.id=:originairportid";
+			query = entityManager.createQuery(strQuery, Flight.class);
+			query.setParameter("originairportid", originairportid);
+		}
+		else if(airlineid == 0 && originairportid == 0 && destairportid != 0) {
+			strQuery = "SELECT f FROM Flight f where f.destination.id=:destairportid";
+			query = entityManager.createQuery(strQuery, Flight.class);
+			query.setParameter("destairportid", destairportid);
+		}
+		else if(airlineid != 0 && originairportid != 0 && destairportid != 0) {
+			strQuery = "SELECT f FROM Flight f where f.airline.id=:airlineid and f.origin.id=:originairportid and f.destination.id=:destairportid";
+			query = entityManager.createQuery(strQuery, Flight.class);
+			query.setParameter("airlineid", airlineid);
+			query.setParameter("originairportid", originairportid);
+			query.setParameter("destairportid", destairportid);
+		}
+		
+		List<Flight> fltList = query.getResultList();
+		
+//		if(fltList.size() == 1)
+//			fltList.add((Flight)query.getSingleResult());
+		
+		return fltList;
+	} 
 }
