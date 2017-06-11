@@ -108,7 +108,7 @@ public class AirlineWebService {
 		return a;
 	}
 	
-	@Path("findbyflightno")
+	@Path("findbyflight")
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

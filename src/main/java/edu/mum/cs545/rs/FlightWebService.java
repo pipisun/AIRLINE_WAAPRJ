@@ -185,7 +185,7 @@ public class FlightWebService {
 	@Path("findbyarrivaltime")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Flight> findFlightByArrival(@QueryParam("flightno") String strDatetime) {
+	public List<Flight> findFlightByArrival(@QueryParam("time") String strDatetime) {
 		List<Flight> flights = null;
 		
 		try {
