@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<h:outputStylesheet library="css" name="table-style.css" />
+</h:head>
+<h:body>
+
+	<h:form>
+		<h:commandLink action="index?faces-redirect=true">
+			<h:outputText value="Back to home"></h:outputText>
+		</h:commandLink>
+	</h:form>
+ 	<br/>	
+ 	 
+ 	<h:form>
+ 	
+ 		<h:outputLabel>Airline Name</h:outputLabel>
+	 	<h:inputText value="#{customAirlineService.name}"></h:inputText>
+	 	
+		<h:commandButton value="Create"  >
+			<f:ajax listener="#{customAirlineService.addAirline()}" execute="@form" render="list" />
+		</h:commandButton>
+	 	
+	</h:form>
+ 
+ 
+ 	<div style="float: left;">
+		<h:dataTable value="#{customAirlineService.listAirline}" var="o" id="list"
+			styleClass="order-table" headerClass="order-table-header"
+			rowClasses="order-table-odd-row,order-table-even-row" style="width:800px">
+			<h:column>
+				<f:facet name="header">Id</f:facet>#{o.id}
+			</h:column>
+			<h:column>
+			
+				<f:facet name="header">Name</f:facet>
+				<h:form>
+				<h:outputLabel rendered="#{o.id ne customAirlineService.id}">#{o.name}</h:outputLabel>
+				<h:inputText value="#{o.name}" rendered="#{o.id eq customAirlineService.id}" >
+					<f:ajax event="blur" execute="@this" render="output"/>  
+				</h:inputText>
+ 				</h:form>
+			</h:column>
+			
+			<h:column>
+			<h:form>
+			 	<h:commandButton value="Update" action="#{customAirlineService.updatePage(o.id)}" rendered="#{o.id ne customAirlineService.id}"> </h:commandButton>
+			 	<h:commandButton value="Save" action="#{customAirlineService.updateAirline(o.id,o.name)}" rendered="#{o.id eq customAirlineService.id}"> </h:commandButton>
+				<h:commandButton value="Delete" action="#{customAirlineService.deleteAirline(o.id)}" > </h:commandButton>
+			</h:form>
+			</h:column>
+			
+		</h:dataTable>
+	</div>
+	 
+</h:body>
+</html>
